@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../product.service';
+import { ProductService } from '../../services/product.service';
 import { Product } from '../product.model';
 
 @Component({
@@ -11,8 +11,10 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
   searchTerm: string = '';
-  displayModal: boolean = false; // Controlar la visibilidad del modal
-  selectedProduct: Product | null = null; // Producto seleccionado para eliminación
+  displayModal: boolean = false;
+  selectedProduct: Product | null = null;
+  totalDisplayed: number = 0;
+  displayCount: number = 10;
 
   constructor(private productService: ProductService) { }
 
@@ -38,7 +40,7 @@ export class ProductListComponent implements OnInit {
           console.log('Product deleted successfully');
           this.displayModal = false;
           this.selectedProduct = null;
-          this.ngOnInit(); // Reload products
+          this.ngOnInit();
         },
         error: (error) => console.error('Error deleting product', error)
       });
@@ -50,9 +52,21 @@ export class ProductListComponent implements OnInit {
     this.selectedProduct = null;
   }
 
+  onSearchChange() {
+    this.updateDisplayedProducts();
+  }
+
+  onDisplayCountChange(newCount: number) {
+    this.displayCount = newCount;
+    this.updateDisplayedProducts();
+  }
+
   updateDisplayedProducts() {
-    this.filteredProducts = this.products.filter(product =>
+    const matchedProducts = this.products.filter(product =>
       this.searchTerm ? product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) : true
-    ).slice(0, this.displayCount);
+    );
+
+    this.totalDisplayed = matchedProducts.length;
+    this.filteredProducts = matchedProducts.slice(0, this.displayCount);
   }
 }

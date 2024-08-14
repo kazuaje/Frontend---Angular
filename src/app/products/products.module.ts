@@ -10,13 +10,18 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
+import { StyleClassModule } from 'primeng/styleclass';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 @NgModule({
   declarations: [
     ProductFormComponent,
     ProductListComponent,
-    // Otros componentes
   ],
   imports: [
     CommonModule,
@@ -24,12 +29,17 @@ import { ButtonModule } from 'primeng/button';
     RouterModule,
     FormsModule,
     DialogModule,
-    ButtonModule
+    ButtonModule,
+    InputTextModule,
+    TableModule,
+    FileUploadModule,
+    CalendarModule,
+    StyleClassModule,
+    InputTextareaModule
   ],
   exports: [
     ProductFormComponent,
-    ProductListComponent,
-    // Otros componentes que necesitas exportar
+    ProductListComponent
   ]
 })
 export class ProductsModule { }

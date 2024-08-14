@@ -1,4 +1,3 @@
-// src/app/products/product.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -20,11 +19,15 @@ export class ProductService {
     return this.http.post(`${this.baseUrl}`, product);
   }
 
-  updateProduct(id: number, product: Product): Observable<any> {
+  updateProduct(id: string, product: Product): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}`, product);
   }
 
   deleteProduct(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  verifyProductId(id: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/verification/${id}`);
   }
 }

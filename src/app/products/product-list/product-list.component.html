@@ -1,44 +1,51 @@
-<input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Buscar por nombre...">
-
-<a [routerLink]="['/products/new']">Crear Nuevo</a>
-
-<p-dialog header="Confirm Delete" [(visible)]="displayModal" [modal]="true">
-  <ng-container *ngIf="selectedProduct">
-    <p>Are you sure you want to delete {{ selectedProduct.name }}?</p>
-    <button pButton type="button" label="Delete" icon="pi pi-check" (click)="onDelete()"></button>
-    <button pButton type="button" label="Cancel" icon="pi pi-times" (click)="onCancel()"></button>
-  </ng-container>
-</p-dialog>
-
-<table>
-  <thead>
-    <tr>
-      <th>Logo</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Fecha de Liberación</th>
-      <th>Fecha de Reestructuración</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let product of filteredProducts">
-      <td><img [src]="product.logo" width="80" alt="Logo"/></td>
-      <td>{{ product.name }}</td>
-      <td>{{ product.description }}</td>
-      <td>{{ product.date_release }}</td>
-      <td>{{ product.date_revision }}</td>
-      <td><a [routerLink]="['/products/edit', product.id]">Edit</a></td>
-      <td><button (click)="onDeleteConfirm(product)">Delete</button></td>
-    </tr>
-  </tbody>
-</table>
-
-<p>Total Mostrado: {{ totalDisplayed }}</p>
-
-<select [(ngModel)]="displayCount" (change)="onDisplayCountChange(displayCount)">
-  <option [value]="5">5</option>
-  <option [value]="10" selected>10</option>
-  <option [value]="20">20</option>
-</select>
+<div class="main-container">
+  <div>
+    <div class="header-table">
+      <input type="text" pInputText class="input-search" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Buscar por nombre..."/>
+      <p-button pRipple class="yellow-btn" [routerLink]="['/products/new']">Agregar</p-button>
+    </div>
+    <div class="container">
+      <p-dialog [(visible)]="displayModal" [modal]="true">
+        <ng-container *ngIf="selectedProduct">
+          <p>¿Está seguro que desea eliminar el producto<br>{{ selectedProduct.name }}?</p>
+          <div class="footer">
+            <p-button type="button" severity="secondary" label="Cancel" icon="pi pi-times" (click)="onCancel()"/>
+            <p-button type="button" class="yellow-btn" label="Delete" icon="pi pi-check" (click)="onDelete()"/>
+          </div>
+        </ng-container>
+      </p-dialog>
+      <p-table [value]="filteredProducts" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Logo</th>
+            <th>Nombre del Producto</th>
+            <th>Descripción</th>
+            <th>Fecha de Liberación</th>
+            <th>Fecha de Reestructuración</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td><img [src]="product.logo" width="60" alt="Logo"/></td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.date_release | date:'longDate' }}</td>
+            <td>{{ product.date_revision | date:'longDate' }}</td>
+            <td><a [routerLink]="['/products/edit', product.id]"><i class="pi pi-pencil"></i></a></td>
+            <td><a (click)="onDeleteConfirm(product)"><i class="pi pi-times"></i></a></td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div class="footer">
+        <p>Total Mostrado: {{ totalDisplayed }}</p>
+        <select [(ngModel)]="displayCount" (ngModelChange)="onDisplayCountChange($event)">
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductService } from '../product.service';
+import { ProductService } from '../../services/product.service';
 import { Product } from '../product.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,7 +13,8 @@ export class ProductFormComponent implements OnInit {
   productForm: FormGroup;
   isEditMode = false;
   currentProductId: string | undefined;
-  imageUrl: string | ArrayBuffer | null = null;  // Propiedad para almacenar la imagen
+  imageUrl: string | ArrayBuffer | null = null;
+  registerForm: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -34,15 +35,17 @@ export class ProductFormComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.currentProductId = id !== null ? id : undefined;
+      this.registerForm = "Registro";
       if (this.currentProductId) {
         this.isEditMode = true;
+        this.registerForm = "Edición";
         this.productService.getProducts().subscribe(response => {
           const products = response.data;
           const product = products.find((p: Product) => p.id === this.currentProductId);
           if (product) {
             this.productForm.patchValue(product);
             if (product.logo) {
-              this.imageUrl = product.logo; // Asume que 'logo' es una URL válida o Data URL
+              this.imageUrl = product.logo;
             }
           }
         });
@@ -66,6 +69,10 @@ export class ProductFormComponent implements OnInit {
 
   generateRandomId(): string {
     return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  }
+
+  resetForm() {
+    this.productForm.reset();
   }
 
   onSubmit() {

@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  background: #ededf3;
+  padding: 20px;
+  width: 100%;
+  min-height: 100vh;
+  .container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+  }
+}
+
+.yellow-btn .p-button {
+  background: #ffdd00;
+  border: 1px solid #ffdd00;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.p-calendar span {
+  width: 100%;
+}
