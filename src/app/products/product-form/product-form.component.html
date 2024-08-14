@@ -1,0 +1,24 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="logo">Logo</label>
+    <input id="logo" type="file" (change)="handleFileInput($event)" />
+    <img [src]="imageUrl" *ngIf="imageUrl" style="width: 100px; height: auto;"> <!-- Muestra la imagen cargada -->
+  </div>
+  <div>
+    <label for="name">Name</label>
+    <input id="name" formControlName="name" type="text"/>
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+  <div>
+    <label for="date_release">Fecha de liberación</label>
+    <input id="date_release" formControlName="date_release" type="date" />
+  </div>
+  <div>
+    <label for="date_revision">Fecha de Reestructuración</label>
+    <input id="date_revision" formControlName="date_revision" type="date" />
+  </div>
+  <button type="submit">Guardar</button>
+</form>

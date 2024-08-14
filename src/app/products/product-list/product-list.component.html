@@ -1,0 +1,44 @@
+<input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Buscar por nombre...">
+
+<a [routerLink]="['/products/new']">Crear Nuevo</a>
+
+<p-dialog header="Confirm Delete" [(visible)]="displayModal" [modal]="true">
+  <ng-container *ngIf="selectedProduct">
+    <p>Are you sure you want to delete {{ selectedProduct.name }}?</p>
+    <button pButton type="button" label="Delete" icon="pi pi-check" (click)="onDelete()"></button>
+    <button pButton type="button" label="Cancel" icon="pi pi-times" (click)="onCancel()"></button>
+  </ng-container>
+</p-dialog>
+
+<table>
+  <thead>
+    <tr>
+      <th>Logo</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Fecha de Liberación</th>
+      <th>Fecha de Reestructuración</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of filteredProducts">
+      <td><img [src]="product.logo" width="80" alt="Logo"/></td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.date_release }}</td>
+      <td>{{ product.date_revision }}</td>
+      <td><a [routerLink]="['/products/edit', product.id]">Edit</a></td>
+      <td><button (click)="onDeleteConfirm(product)">Delete</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Total Mostrado: {{ totalDisplayed }}</p>
+
+<select [(ngModel)]="displayCount" (change)="onDisplayCountChange(displayCount)">
+  <option [value]="5">5</option>
+  <option [value]="10" selected>10</option>
+  <option [value]="20">20</option>
+</select>
