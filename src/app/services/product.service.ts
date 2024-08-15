@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from '../products/product.model';
+import { ProductModel } from 'app/models/product.model';
+import { ResponseModel } from 'app/models/response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,20 +12,20 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(): Observable<any> {
-    return this.http.get(`${this.baseUrl}`);
+  getProducts(): Observable<ResponseModel<ProductModel[]>> {
+    return this.http.get<ResponseModel<ProductModel[]>>(`${this.baseUrl}`);
   }
 
-  addProduct(product: Product): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, product);
+  addProduct(product: ProductModel): Observable<ResponseModel<ProductModel>> {
+    return this.http.post<ResponseModel<ProductModel>>(`${this.baseUrl}`, product);
   }
 
-  updateProduct(id: string, product: Product): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, product);
+  updateProduct(id: string, product: ProductModel): Observable<ResponseModel<ProductModel>> {
+    return this.http.put<ResponseModel<ProductModel>>(`${this.baseUrl}/${id}`, product);
   }
 
-  deleteProduct(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+  deleteProduct(id: string): Observable<ResponseModel<any>> {
+    return this.http.delete<ResponseModel<any>>(`${this.baseUrl}/${id}`);
   }
 
   verifyProductId(id: string): Observable<boolean> {

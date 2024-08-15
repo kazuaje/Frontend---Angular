@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
-import { Product } from '../product.model';
+import { ProductModel } from 'app/models/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -8,19 +8,21 @@ import { Product } from '../product.model';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  products: Product[] = [];
-  filteredProducts: Product[] = [];
+  products: ProductModel[] = [];
+  filteredProducts: ProductModel[] = [];
   searchTerm: string = '';
   displayModal: boolean = false;
-  selectedProduct: Product | null = null;
+  selectedProduct: ProductModel | null = null;
   totalDisplayed: number = 0;
   displayCount: number = 10;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
+    console.log('loading');
     this.productService.getProducts().subscribe({
       next: (response) => {
+        
         this.products = response.data;
         this.updateDisplayedProducts();
       },
@@ -28,7 +30,7 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  onDeleteConfirm(product: Product) {
+  onDeleteConfirm(product: ProductModel) {
     this.selectedProduct = product;
     this.displayModal = true;
   }

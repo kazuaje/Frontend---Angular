@@ -5,7 +5,7 @@
       <p-button pRipple class="yellow-btn" [routerLink]="['/products/new']">Agregar</p-button>
     </div>
     <div class="container">
-      <p-dialog [(visible)]="displayModal" [modal]="true">
+      <p-dialog header="Eliminar" [(visible)]="displayModal" [modal]="true">
         <ng-container *ngIf="selectedProduct">
           <p>¿Está seguro que desea eliminar el producto<br>{{ selectedProduct.name }}?</p>
           <div class="footer">
@@ -39,7 +39,7 @@
         </ng-template>
       </p-table>
       <div class="footer">
-        <p>Total Mostrado: {{ totalDisplayed }}</p>
+        <p>Total Registros: {{ totalDisplayed }}</p>
         <select [(ngModel)]="displayCount" (ngModelChange)="onDisplayCountChange($event)">
           <option [value]="5">5</option>
           <option [value]="10">10</option>
