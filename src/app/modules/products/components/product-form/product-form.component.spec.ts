@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductFormComponent } from './product-form.component';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../../../services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';

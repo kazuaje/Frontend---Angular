@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
-import { ProductModel } from 'app/models/product.model';
+import { ProductModel } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit {
     console.log('loading');
     this.productService.getProducts().subscribe({
       next: (response) => {
-        
+
         this.products = response.data;
         this.updateDisplayedProducts();
       },

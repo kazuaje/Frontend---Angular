@@ -1,18 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AbstractControl,
-  AsyncValidatorFn,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProductModel } from 'app/models/product.model';
-import { addYears, isAfter, isEqual, parseISO, startOfDay } from 'date-fns';
-import { catchError, map, Observable, of } from 'rxjs';
+import { ProductModel } from '../../models/product.model';
+import { parseISO } from 'date-fns';
+import { validateExistingId, validateReleaseDate, validateReviewDate } from '../../validators/product.validator';
 
 @Component({
   selector: 'app-product-form',
@@ -62,7 +58,7 @@ export class ProductFormComponent implements OnInit {
               }
             }
           });
-      } else {  
+      } else {
         this.isEditMode = false;
       }
 
@@ -73,7 +69,7 @@ export class ProductFormComponent implements OnInit {
             Validators.minLength(3),
             Validators.maxLength(10),
           ],
-          asyncValidators: [this.validateExistingId()],
+          asyncValidators: [validateExistingId(this.productService)],
           updateOn: 'blur',
         }),
         name: new FormControl('', [
@@ -88,11 +84,11 @@ export class ProductFormComponent implements OnInit {
         ]),
         releaseDate: new FormControl('', [
           Validators.required,
-          this.validateReleaseDate(),
+          validateReleaseDate(),
         ]),
         reviewDate: new FormControl('', [
           Validators.required,
-          this.validateReviewDate('releaseDate'),
+          validateReviewDate('releaseDate'),
         ]),
         logo: new FormControl('', [Validators.required]),
       });
@@ -188,65 +184,5 @@ export class ProductFormComponent implements OnInit {
     return this.productForm.get('logo');
   }
 
-  //
-  // Validators
-  //
 
-  validateExistingId(): AsyncValidatorFn {
-    return (
-      control: AbstractControl
-    ): Observable<{ [key: string]: any } | null> => {
-      const id = control.value;
-
-      if (!id) {
-        return of(null); // Si el campo está vacío, no validamos
-      }
-
-      return this.productService.verifyProductId(id).pipe(
-        map((isExisting) => (isExisting ? { existingId: true } : null)),
-        catchError(() => of(null)) // Maneja errores si es necesario
-      );
-    };
-  }
-
-  validateReleaseDate(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) {
-        return null;
-      }
-
-      const controlDate = startOfDay(control.value);
-      const today = startOfDay(new Date());
-
-      if (isEqual(controlDate, today) || isAfter(controlDate, today)) {
-        return null;
-      } else {
-        return { dateIsNotFuture: true };
-      }
-    };
-  }
-
-  validateReviewDate(releaseDateControlName: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value || !control.parent) {
-        return null; // Si no hay valor o el control no tiene un elemento padre, no valida
-      }
-
-      const releaseDateControl = control.parent.get(releaseDateControlName);
-      if (!releaseDateControl || !releaseDateControl.value) {
-        return null; // Si no hay control de fecha de liberación o valor, no valida
-      }
-
-      const releaseDate = startOfDay(releaseDateControl.value);
-      const revisionDate = startOfDay(control.value);
-
-      // Añade un año a la fecha de liberación y compara con la fecha de revisión
-      const oneYearAfterRelease = addYears(releaseDate, 1);
-      if (isEqual(oneYearAfterRelease, revisionDate)) {
-        return null; // Las fechas coinciden exactamente un año después
-      } else {
-        return { notOneYearAfter: true }; // Retorna un error si no es exactamente un año después
-      }
-    };
-  }
 }
